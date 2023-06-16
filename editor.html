@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rich Text Editor</title>
+  <style>
+    .editor {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .toolbar button {
+      font-weight: bold;
+    }
+
+    .content {
+      border: 1px solid #ccc;
+      min-height: 150px;
+      padding: 5px;
+    }
+  </style>
+  <script>
+    function execCommand(command, value = null) {
+      document.execCommand(command, false, value);
+    }
+
+    function createLink() {
+      const url = prompt('Enter the URL:');
+      if (url) {
+        execCommand('createLink', url);
+      }
+    }
+
+    function unlink() {
+      execCommand('unlink');
+    }
+
+    // Get the content of the editor
+    function getContent() {
+      return document.getElementById('editor').innerHTML;
+    }
+
+    // Set the content of the editor
+    function setContent(content) {
+      document.getElementById('editor').innerHTML = content;
+    }
+
+    function submitForm() {
+      const title = document.getElementById('title').value;
+      const content = getContent();
+      // Perform actions with the title and content, e.g., send them to the server
+      console.log('Title:', title);
+      console.log('Content:', content);
+      // Add your logic here to handle the submitted title and content
+    }
+  </script>
+</head>
+<body>
+  <h1>Rich Text Editor</h1>
+
+  <form onsubmit="submitForm(); return false;">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+
+    <div class="editor">
+      <div class="toolbar">
+        <button onclick="execCommand('bold')"><b>B</b></button>
+        <button onclick="execCommand('italic')"><i>I</i></button>
+        <button onclick="execCommand('underline')"><u>U</u></button>
+        <button onclick="execCommand('insertOrderedList')">&#35;</button>
+        <button onclick="execCommand('insertUnorderedList')">&#8226;</button>
+        <button onclick="createLink()">&#128279;</button>
+        <button onclick="unlink()">&#128682;</button>
+        <select onchange="execCommand('formatBlock', this.value)">
+          <option value="p">Paragraph</option>
+          <option value="h1">Heading 1</option>
+          <option value="h2">Heading 2</option>
+          <option value="h3">Heading 3</option>
+          <option value="h4">Heading 4</option>
+          <option value="h5">Heading 5</option>
+          <option value="h6">Heading 6</option>
+        </select>
+      </div>
+      <div contenteditable="true" class="content" id="editor"></div>
+    </div>
+
+    <textarea name="editorContent" id="editorContent" style="display: none;"></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
